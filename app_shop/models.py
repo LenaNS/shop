@@ -14,29 +14,15 @@ class Category(models.Model):
     """
 
     name = models.CharField(max_length=100, verbose_name='Название')
-    description = models.TextField(verbose_name='Описание', blank=True)
+    description = models.TextField(blank=True, verbose_name='Описание')
 
     def __str__(self):
         return self.name
     
+    class Meta:
+        verbose_name = "Тип"
+        verbose_name_plural = "Типы"
 
-class Price(models.Model):
-    """
-    Модель цен товаров.
-
-    Поля
-    ----
-    currency:
-        Валюта цены.
-    amount:
-        Стоимость товара.
-    """
-
-    currency = models.CharField(max_length=10, verbose_name='Валюта')
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость')
-
-    def __str__(self):
-        return f"{self.amount} {self.currency}"
 
 
 class Product(models.Model):
@@ -60,9 +46,9 @@ class Product(models.Model):
     """
 
     name = models.CharField(max_length=100, verbose_name='Название')
-    price = models.ForeignKey(Price, on_delete=models.CASCADE, verbose_name='Цена')
+
     quantity = models.PositiveIntegerField(verbose_name='Количество')
-    barcode = models.CharField(max_length=50, verbose_name='Штрихкод', unique=True)
+    barcode = models.CharField(max_length=50, unique=True, verbose_name='Штрихкод')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, verbose_name='Тип')
 
@@ -91,3 +77,31 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = "Товар"
+        verbose_name_plural = "Товары"
+    
+
+class Price(models.Model):
+    """
+    Модель цен товаров.
+
+    Поля
+    ----
+    currency:
+        Валюта цены.
+    amount:
+        Стоимость товара.
+    """
+
+    currency = models.CharField(max_length=10, verbose_name='Валюта')
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Стоимость')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
+
+    def __str__(self):
+        return f"{self.amount} {self.currency}"
+    
+    class Meta:
+        verbose_name = "Цена"
+        verbose_name_plural = "Цены"

@@ -17,7 +17,6 @@ class ProductAdmin(ModelAdmin):
     
     list_display = (
         "name",
-        "price",
         "quantity",
         "barcode",
         "updated_at",
@@ -57,4 +56,5 @@ class PriceAdmin(ModelAdmin):
     list_display = (
         "currency",
         "amount",
+        "product"
     )
